@@ -1,0 +1,128 @@
+Limits
+using a 4 KB block size, 4 byte address
+    - max size of drive is 17.5 TB
+    - Max entries in inode is 31
+
+
+**** Filesystem structure ****
+
+root node
+root inode (directory)
+  |-- Directory under root
+  |-- Small file under root (under block_size-128 of data)
+  |-- Large file under root (over block_size-128 of data)
+      |-- Data Inode
+      |-- Data Inode
+      |-- Data Inode
+      |-- Data Inode
+      |-- Data Inode
+
+
+Parent Inode holds pointer to each data Inode, and each data inode points to the next inode
+Large File
+     Inode 1
+      |------|------|------|------|------|------|
+Inode 2----->3----->4----->5----->6----->7----->8
+
+**************************************
+
+
+Root Node Layout
+
+2   bytes  : flags
+             - bit 15 : is root node? (1 for root node)
+             - bit 14 : 
+             - bit 13 :
+             - bit 12 :
+             - bit 11 :
+             - bit 10 :
+             - bit 9  :
+             - bit 8  :
+             - bit 7  : 
+             - bit 6  : 
+             - bit 5  :
+             - bit 4  :
+             - bit 3  :
+             - bit 2  : 
+             - bit 1  :
+             - bit 0  : 
+2   bytes  : block size (minimum 4 KB)
+4   bytes  : next end page (this points to what the next page at the end filesystem block will be)
+120 bytes  : reserved
+128 bytes  : Inode entry 1 (always points to root inode)
+...
+128 bytes  : Inode entry (block size/128-1 | 4KB/128-1 = 31)
+
+
+Inode entry (128 bytes)
+
+1   byte   : flags
+             - bit 7 : is directory? (0 for file)
+             - bit 6 : is hidden? (1 for hidden)
+             - bit 5 : 
+             - bit 4 :
+             - bit 3 :
+             - bit 2 :
+             - bit 1 :
+             - bit 0 : 
+1   byte   : permissions
+4   bytes  : page address
+122 bytes  : name
+
+
+
+Inode (block size) - Dirctory or large file
+
+2   bytes  : flags
+             - bit 15 : is directory? (0 for file)
+             - bit 14 : Contains data? (0 for directory or file pointer)
+             - bit 13 :
+             - bit 12 :
+             - bit 11 :
+             - bit 10 :
+             - bit 9  :
+             - bit 8  :
+             - bit 7  : 
+             - bit 6  : 
+             - bit 5  :
+             - bit 4  :
+             - bit 3  :
+             - bit 2  : 
+             - bit 1  :
+             - bit 0  : 
+4   bytes  : parent inode (previous directory if main inode)
+4   bytes  : next inode (next inode if more inode entries are needed)
+2   bytes  : ref count
+114 bytes  : reserved
+128 bytes  : Inode entry 1
+...
+128 bytes  : Inode entry (block size/128-1 | 4KB/128-1 = 31)
+
+
+
+Inode (block size) - Data
+
+2   bytes  : flags
+             - bit 15 : is directory? (0 for file)
+             - bit 14 : Contains data? (1 for a data inode)
+             - bit 13 :
+             - bit 12 :
+             - bit 11 :
+             - bit 10 :
+             - bit 9  :
+             - bit 8  :
+             - bit 7  : 
+             - bit 6  : 
+             - bit 5  :
+             - bit 4  :
+             - bit 3  :
+             - bit 2  : 
+             - bit 1  :
+             - bit 0  : 
+4   bytes  : parent inode (inode that points to this)
+4   bytes  : next inode (next inode of data)
+2   bytes  : ref count
+2   bytes  : data size
+112 bytes  : reserved
+block_size - 128 bytes : data
+

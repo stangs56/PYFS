@@ -58,6 +58,8 @@ class TestPYFS(unittest.TestCase):
         self.pyfs.save_all()
         self.pyfs.block_dev.seek(2*DEFAULT_BLOCK_SIZE, 0)
         data = self.pyfs.block_dev.read(DEFAULT_BLOCK_SIZE)
+
+        self.assertEqual(len(data), len(b.full_inode_data))
         self.assertEqual(data, b.full_inode_data)
     
     @log_test_case

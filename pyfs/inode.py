@@ -73,7 +73,7 @@ class Inode(Node):
 
     @property
     def full_inode_data(self) -> bytes:
-        return self.meta + self.data
+        return self._data
     
     @property
     def data(self) -> bytes:

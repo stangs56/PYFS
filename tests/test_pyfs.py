@@ -1,9 +1,11 @@
 import unittest
 import io
+import os
 import logging
 
+from pyfs.inode import Inode
 from pyfs.pyfs import PYFS
-from pyfs.constants import DEFAULT_BLOCK_SIZE, BYTE_ORDER
+from pyfs.constants import DEFAULT_BLOCK_SIZE, BYTE_ORDER, INODE_META_SIZE
 from tests.test_common import log_with_debug, log_test_case
 
 logging.basicConfig(filename="test_pyfs.log", level=logging.WARNING)
@@ -35,7 +37,6 @@ class TestPYFS(unittest.TestCase):
         self.pyfs.read_root_inode()
         self.assertIsNotNone(self.pyfs.root_inode)
 
-    @log_with_debug
     @log_test_case
     def test_read_inode(self):
         a = self.pyfs.read_inode(1)
@@ -73,17 +74,58 @@ class TestPYFS(unittest.TestCase):
     
     @log_test_case
     def test_create_inode(self):
-        self.assertFalse(True)
+        NUM_INODES = 200
+        for i in range(2, NUM_INODES+1):
+            b = self.pyfs.create_inode()
+            self.assertEqual(b.addr, i)
+            b.parent_inode_addr = i-1
+
+        self.assertEqual(len(self.pyfs.loaded_inodes), NUM_INODES)
     
     @log_test_case
     def test_save_all(self):
-        self.assertFalse(True)
+        NUM_INODES = 200
+        for i in range(2, NUM_INODES+1):
+            b = self.pyfs.create_inode()
+            self.assertEqual(b.addr, i)
+            b.parent_inode_addr = i-1
+
+        loaded_inodes = self.pyfs.loaded_inodes
+        self.assertEqual(len(loaded_inodes), NUM_INODES)
+        self.pyfs.save_all()
+        self.pyfs = PYFS(self.fs)
+        self.pyfs.read_root_inode()
+
+        for i in range(2, NUM_INODES+1):
+            b = self.pyfs.read_inode(i)
+            self.assertEqual(b.addr, i)
+            self.assertEqual(b.parent_inode_addr, i-1)
+        
+        self.assertEqual(len(self.pyfs.loaded_inodes), NUM_INODES)
+        self.assertCountEqual(loaded_inodes, self.pyfs.loaded_inodes)
     
     @log_test_case
     def test_write_block(self):
-        self.assertFalse(True)
+        NUM_BLOCKS = 200
+        data = [(tmp.to_bytes(1, byteorder=BYTE_ORDER))*DEFAULT_BLOCK_SIZE for tmp in range(NUM_BLOCKS)]
+
+        for i in range(2, NUM_BLOCKS+1):
+            self.pyfs.write_block(i, data[i-2])
+        
+        self.fs.seek(2*DEFAULT_BLOCK_SIZE, 0)
+        for i in range(2, NUM_BLOCKS+1):
+            b = self.fs.read(DEFAULT_BLOCK_SIZE)
+            self.assertEqual(b, data[i-2])
     
     @log_test_case
     def test_write_inode(self):
-        self.assertFalse(True)
+        NUM_INODE = 200
+        for i in range(2, NUM_INODE+1):
+            a = Inode(2, bytes(DEFAULT_BLOCK_SIZE), self.pyfs)
+            a.is_dir = False
+            a.data = os.urandom(DEFAULT_BLOCK_SIZE-INODE_META_SIZE)
+            self.pyfs.write_inode(a)
+            b = self.pyfs.read_inode(2, force_read=True)
+            self.assertEqual(a, b)
+
     

@@ -71,19 +71,19 @@ class TestPYFS(unittest.TestCase):
         self.pyfs.block_dev.write(invalid_size.to_bytes(2, byteorder=BYTE_ORDER))
         self.assertFalse(self.pyfs.check_fs())
     
-    @unittest.expectedFailure
+    @log_test_case
     def test_create_inode(self):
         self.assertFalse(True)
     
-    @unittest.expectedFailure
+    @log_test_case
     def test_save_all(self):
         self.assertFalse(True)
     
-    @unittest.expectedFailure
+    @log_test_case
     def test_write_block(self):
         self.assertFalse(True)
     
-    @unittest.expectedFailure
+    @log_test_case
     def test_write_inode(self):
         self.assertFalse(True)
     

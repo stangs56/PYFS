@@ -1,0 +1,5 @@
+*.log
+*.fs
+.vscode
+__pycache__
+*.pyc

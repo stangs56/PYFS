@@ -1,13 +1,13 @@
-import inode_entry
+import pyfs.inode_entry
 from typing import List
-from inode import Inode
+from pyfs.inode import Inode
 import unittest
 import io
 import logging
 
-from pyfs import PYFS
-from inode import InodeEntryExists
-from constants import DEFAULT_BLOCK_SIZE
+from pyfs.pyfs import PYFS
+from pyfs.inode import InodeEntryExists
+from pyfs.constants import DEFAULT_BLOCK_SIZE
 
 from tests.test_common import create_dir_if_not_exists, log_with_debug, log_test_case
 

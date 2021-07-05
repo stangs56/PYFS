@@ -5,8 +5,8 @@ import os
 import code
 import shlex
 
-from pyfs import PYFS
-from inode import InodeEntryExists, Inode
+from pyfs.pyfs import PYFS
+from pyfs.inode import InodeEntryExists, Inode
 from interactive_utils import set_up_interactive
 
 #set up logging levels for all the different loggers

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-import pyfs
-
-from constants import INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
-from inode_entry import InodeEntry
+import pyfs.pyfs
+from pyfs.constants import INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
+from pyfs.inode_entry import InodeEntry
 
 logger = logging.getLogger("pyfs.node")
 
 class Node:
-    def __init__(self, addr: int, data: bytes, fs: 'pyfs.PYFS'):
+    def __init__(self, addr: int, data: bytes, fs: 'pyfs.pyfs.PYFS'):
         #self.meta = data[:INODE_META_SIZE]
         logger.debug("Meta data for Node %s: %s", addr, data[:INODE_META_SIZE])
 

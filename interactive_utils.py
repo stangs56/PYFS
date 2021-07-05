@@ -1,6 +1,6 @@
 import logging
-import pyfs
-import inode
+import pyfs.pyfs
+import pyfs.inode
 import shlex
 
 from functools import partial
@@ -13,7 +13,7 @@ cwd = PurePosixPath('/')
 fs = None
 current_inode = None
 
-def set_up_interactive(file_system: 'pyfs.PYFS'):
+def set_up_interactive(file_system: 'pyfs.pyfs.PYFS'):
     global fs
     
     fs = file_system

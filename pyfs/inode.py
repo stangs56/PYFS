@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import pyfs
 
-from constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
-from inode_entry import InodeEntry
-from node import Node
+from pyfs.constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
+from pyfs.inode_entry import InodeEntry
+from pyfs.node import Node
 
 logger = logging.getLogger("pyfs.inode")
 

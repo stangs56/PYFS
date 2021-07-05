@@ -1,5 +1,5 @@
-from pyfs import PYFS
-from inode import InodeEntryExists, Inode
+from pyfs.pyfs import PYFS
+from pyfs.inode import InodeEntryExists, Inode
 
 import logging
 

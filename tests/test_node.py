@@ -14,7 +14,7 @@ from tests.test_common import create_dir_if_not_exists, log_with_debug, log_test
 
 logging.basicConfig(filename="test_pyfs.log", level=logging.WARNING)
 
-class TestInode(unittest.TestCase):
+class TestNode(unittest.TestCase):
     def test_meta(self):
         raise NotImplementedError()
 

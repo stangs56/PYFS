@@ -2,7 +2,7 @@ from io import BufferedRandom
 import logging
 
 from .inode import Inode
-from .constants import BYTE, DEFAULT_BLOCK_SIZE, INODE_META_SIZE, BYTE_ORDER
+from .constants import DEFAULT_BLOCK_SIZE, BYTE_ORDER
 
 logger = logging.getLogger('pyfs')
 

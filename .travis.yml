@@ -8,6 +8,8 @@ python:
   - "3.7"
 script:
   - python -m unittest
+  - python -m pylint pyfs
+  - python -m pylint tests --errors-only
 jobs:
   allow_failures:
     - python: "nightly"

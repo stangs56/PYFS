@@ -8,8 +8,6 @@ from pyfs.pyfs import PYFS
 from pyfs.constants import DEFAULT_BLOCK_SIZE, BYTE_ORDER, INODE_META_SIZE
 from tests.test_common import log_with_debug, log_test_case
 
-logging.basicConfig(filename="test_pyfs.log", level=logging.WARNING)
-
 class TestPYFS(unittest.TestCase):
     @log_test_case
     def setUp(self):

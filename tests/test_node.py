@@ -12,8 +12,6 @@ from pyfs.constants import DEFAULT_BLOCK_SIZE
 
 from tests.test_common import create_dir_if_not_exists, log_with_debug, log_test_case
 
-logging.basicConfig(filename="test_pyfs.log", level=logging.WARNING)
-
 class TestNode(unittest.TestCase):
     def test_meta(self):
         raise NotImplementedError()

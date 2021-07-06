@@ -121,7 +121,7 @@ class TestPYFS(unittest.TestCase):
         self.assertFalse(file_inode.is_dir)
         self.assertFalse(file_inode.contains_data)
 
-        for file_str in ('hi this are words', '', '\n\n\n\n', '\x00hi\x00'):
+        for file_str in ('hi this are words', '', '\n\n\n\n', '\x00hi\x00', ' '*(DEFAULT_BLOCK_SIZE+1)):
             file_inode = self.pyfs.read_inode(file_inode_entry.addr)
             self.assertIsNotNone(file_inode)
             self.assertFalse(file_inode.is_dir)

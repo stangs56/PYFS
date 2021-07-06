@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import logging
-import pyfs
+import pyfs #pylint: disable=unused-import
 
-from pyfs.constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
+from pyfs.constants import INODE_META_SIZE, INODE_FLAGS
 from pyfs.inode_entry import InodeEntry
 from pyfs.node import Node
 
@@ -111,21 +111,21 @@ class Inode(Node):
         return [a for a in self.children if not a.free and (not a.is_hidden or show_hidden)] + next_inode_ls
 
     def find_entry(self, name) -> InodeEntry:
-        for a in self.ls():
-            if a.name == name:
-                logger.debug('Matched %s to %s', a, name)
-                return a
+        for entry in self.ls():
+            if entry.name == name:
+                logger.debug('Matched %s to %s', entry, name)
+                return entry
         return None
 
     def add_inode_entry(self, name, child: 'Inode'):
         logger.debug("Inode %s Adding Inode Entry...", self.addr)
         self.dirty = True
-        for ie in self.children:
-            if ie.free:
+        for entry in self.children:
+            if entry.free:
                 logger.debug('Inode %s added entry for Inode %s', self.addr, child.addr)
-                ie.addr = child.addr
-                ie.is_dir = child.is_dir
-                ie.name = name
+                entry.addr = child.addr
+                entry.is_dir = child.is_dir
+                entry.name = name
                 break
         else:
             if self.next_inode_addr == 0:

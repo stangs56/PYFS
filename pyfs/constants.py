@@ -1,3 +1,4 @@
+'''Constants for the pyfs package'''
 
 BYTE = 1
 KB = 1024 * BYTE

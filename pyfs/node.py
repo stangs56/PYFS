@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import logging
-import pyfs.pyfs
-from pyfs.constants import INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
-from pyfs.inode_entry import InodeEntry
+import pyfs.pyfs #pylint: disable=unused-import
+
+from pyfs.constants import INODE_META_SIZE, BYTE_ORDER
 
 logger = logging.getLogger("pyfs.node")
 
@@ -18,6 +18,8 @@ class Node:
 
         self.addr = addr
         self.fs = fs
+
+        self.meta_flag_locs = []
     
     @property
     def meta(self) -> bytes:
@@ -37,24 +39,24 @@ class Node:
 
         self.set_meta_bytes(value, 0, 2)
 
-    def set_flags(self, property, value :bool):
+    def set_flags(self, flag, value :bool):
         self.dirty = True
-        logger.debug('node %s %s set to %s', self.addr, property, value)
+        logger.debug('node %s %s set to %s', self.addr, flag, value)
 
         if value:
-            self.flags = self.flags | self.meta_flag_locs[property]
+            self.flags = self.flags | self.meta_flag_locs[flag]
         else:
-            self.flags = self.flags & ~self.meta_flag_locs[property]
+            self.flags = self.flags & ~self.meta_flag_locs[flag]
     
-    def get_flag(self, property) -> bool:
-        return bool(self.flags & self.meta_flag_locs[property])
+    def get_flag(self, flag) -> bool:
+        return bool(self.flags & self.meta_flag_locs[flag])
 
     def set_meta_bytes(self, value, start_pos, size):
         self.dirty = True
         self.meta = self.meta[:start_pos] + value.to_bytes(size, byteorder=BYTE_ORDER) + self.meta[start_pos+size:]
     
-    def get_meta_bytes(self, start_pos, size, type=int):
-        return type.from_bytes(self.meta[start_pos:start_pos+size], byteorder=BYTE_ORDER)
+    def get_meta_bytes(self, start_pos, size, ret_type=int):
+        return ret_type.from_bytes(self.meta[start_pos:start_pos+size], byteorder=BYTE_ORDER)
     
     def __repr__(self) -> str:
         return f"Node {self.addr}: Meta - {self.meta} Data - {self._data}"

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import pyfs
 
 from pyfs.constants import BYTE_ORDER, INODE_ENTRY_FLAGS
 
@@ -84,7 +83,7 @@ class InodeEntry:
 
     @property
     def free(self):
-        return (self.addr == 0)
+        return self.addr == 0
     
     def __str__(self):
         return f'{self.addr} {self.name}'

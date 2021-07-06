@@ -6,6 +6,7 @@ import pyfs
 from pyfs.constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
 from pyfs.inode_entry import InodeEntry
 from pyfs.node import Node
+from pyfs.errors import *
 
 logger = logging.getLogger("pyfs.inode")
 
@@ -171,12 +172,3 @@ class Inode(Node):
     
     def __repr__(self) -> str:
         return f"Inode {self.addr}: contains_data: {self.contains_data} is_dirty: {self.dirty} parent: {self.parent_inode_addr} next: {self.next_inode_addr}"
-
-class InodeError(Exception):
-    pass
-
-class InodeEntryExists(InodeError):
-    pass
-
-class OutOfInodeError(InodeError):
-    pass

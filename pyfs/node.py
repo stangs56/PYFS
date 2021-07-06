@@ -18,6 +18,8 @@ class Node:
 
         self.addr = addr
         self.fs = fs
+
+        self.meta_flag_locs = []
     
     @property
     def meta(self) -> bytes:

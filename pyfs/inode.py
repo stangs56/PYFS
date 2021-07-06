@@ -3,9 +3,10 @@ from __future__ import annotations
 import logging
 import pyfs #pylint: disable=unused-import
 
-from pyfs.constants import INODE_META_SIZE, INODE_FLAGS
-from pyfs.inode_entry import InodeEntry
-from pyfs.node import Node
+from .errors import InodeEntryExists
+from .inode_entry import InodeEntry
+from .constants import INODE_META_SIZE, INODE_FLAGS
+from .node import Node
 
 logger = logging.getLogger("pyfs.inode")
 
@@ -171,12 +172,3 @@ class Inode(Node):
 
     def __repr__(self) -> str:
         return f"Inode {self.addr}: contains_data: {self.contains_data} is_dirty: {self.dirty} parent: {self.parent_inode_addr} next: {self.next_inode_addr}"
-
-class InodeError(Exception):
-    pass
-
-class InodeEntryExists(InodeError):
-    pass
-
-class OutOfInodeError(InodeError):
-    pass

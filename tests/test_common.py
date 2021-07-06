@@ -1,7 +1,6 @@
-from pyfs.pyfs import PYFS
-from pyfs.inode import InodeEntryExists, Inode
-
 import logging
+
+from pyfs import PYFS, InodeEntryExists, Inode
 
 def create_dir_if_not_exists(inode: Inode, name):
     try:

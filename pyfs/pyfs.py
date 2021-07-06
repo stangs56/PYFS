@@ -1,8 +1,8 @@
 from io import BufferedRandom
 import logging
 
-from pyfs.inode import Inode
-from pyfs.constants import BYTE, DEFAULT_BLOCK_SIZE, INODE_META_SIZE, BYTE_ORDER
+from .inode import Inode
+from .constants import BYTE, DEFAULT_BLOCK_SIZE, INODE_META_SIZE, BYTE_ORDER
 
 logger = logging.getLogger('pyfs')
 

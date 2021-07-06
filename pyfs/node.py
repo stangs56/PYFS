@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import logging
 import pyfs.pyfs
-from pyfs.constants import INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
-from pyfs.inode_entry import InodeEntry
+from .constants import INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
 
 logger = logging.getLogger("pyfs.node")
 

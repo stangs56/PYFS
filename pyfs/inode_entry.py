@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import pyfs
 
-from pyfs.constants import BYTE_ORDER, INODE_ENTRY_FLAGS
+from .constants import BYTE_ORDER, INODE_ENTRY_FLAGS
 
 logger = logging.getLogger("pyfs.inode")
 

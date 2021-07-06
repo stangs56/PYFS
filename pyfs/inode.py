@@ -3,10 +3,10 @@ from __future__ import annotations
 import logging
 import pyfs
 
-from pyfs.constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
-from pyfs.inode_entry import InodeEntry
-from pyfs.node import Node
-from pyfs.errors import *
+from .errors import InodeEntryExists
+from .inode_entry import InodeEntry
+from .constants import BYTE, INODE_META_SIZE, BYTE_ORDER, INODE_FLAGS
+from .node import Node
 
 logger = logging.getLogger("pyfs.inode")
 

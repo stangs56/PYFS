@@ -25,11 +25,11 @@ class InodeEntry:
 
     @property
     def flags(self) -> int:
-        return int.from_bytes(self._data[:1], byteorder=BYTE_ORDER)
+        return int.from_bytes(self.data[:1], byteorder=BYTE_ORDER)
     
     @flags.setter
     def flags(self, value: int):
-        self._data = value.to_bytes(1, byteorder=BYTE_ORDER) + self._data[1:]
+        self.data = value.to_bytes(1, byteorder=BYTE_ORDER) + self.data[1:]
 
     def get_bit_flag(self, field) -> bool:
         return bool(self.flags & self.entry_flags[field])
@@ -58,11 +58,11 @@ class InodeEntry:
 
     @property
     def permissions(self) -> int:
-        return int.from_bytes(self._data[1:2], byteorder=BYTE_ORDER)
+        return int.from_bytes(self.data[1:2], byteorder=BYTE_ORDER)
     
     @permissions.setter
     def permissions(self, value: int):
-        self._data = self._data[:1] + value.to_bytes(1, byteorder=BYTE_ORDER) + self._data[2:6]
+        self.data = self.data[:1] + value.to_bytes(1, byteorder=BYTE_ORDER) + self.data[2:]
 
     @property
     def addr(self) -> int:
@@ -92,3 +92,9 @@ class InodeEntry:
     
     def __str__(self):
         return f'{self.addr} {self.name}'
+    
+    def __repr__(self) -> str:
+        return str(self._data)
+
+    def __eq__(self, other: InodeEntry) -> bool:
+        return self._data == other._data

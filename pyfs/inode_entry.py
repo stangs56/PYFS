@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import logging
 
-from .constants import BYTE_ORDER, INODE_ENTRY_FLAGS
+from .constants import BYTE_ORDER, INODE_ENTRY_FLAGS, INODE_ENTRY_SIZE
 
 logger = logging.getLogger("pyfs.inode")
 
 class InodeEntry:
     def __init__(self, data: bytes):
-        self._data = data
+        self._data = None
+        self.entry_flags = INODE_ENTRY_FLAGS
+
+        self.data = data
     
     @property
     def data(self) -> bytes:
@@ -16,6 +19,8 @@ class InodeEntry:
     
     @data.setter
     def data(self, value: bytes):
+        if len(value) != INODE_ENTRY_SIZE:
+            raise ValueError(f'Data size should be {INODE_ENTRY_SIZE} bytes but is {len(value)}')
         self._data = value
 
     @property
@@ -27,13 +32,13 @@ class InodeEntry:
         self._data = value.to_bytes(1, byteorder=BYTE_ORDER) + self._data[1:]
 
     def get_bit_flag(self, field) -> bool:
-        return self.flags & INODE_ENTRY_FLAGS[field]
+        return bool(self.flags & self.entry_flags[field])
     
     def set_bit_flag(self, field, value: bool):
         if value:
-            self.flags = self.flags | INODE_ENTRY_FLAGS[field]
+            self.flags = self.flags | self.entry_flags[field]
         else:
-            self.flags = self.flags & ~INODE_ENTRY_FLAGS[field]
+            self.flags = self.flags & ~self.entry_flags[field]
 
     @property
     def is_dir(self) -> bool:

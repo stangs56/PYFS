@@ -37,29 +37,29 @@ class TestPYFS(unittest.TestCase):
 
     @log_test_case
     def test_read_inode(self):
-        a = self.pyfs.read_inode(1)
+        inode_a = self.pyfs.read_inode(1)
 
         self.pyfs.block_dev.seek(1*DEFAULT_BLOCK_SIZE, 0)
         data = self.pyfs.block_dev.read(DEFAULT_BLOCK_SIZE)
-        self.assertEqual(a.addr, 1)
-        self.assertEqual(data, a.full_inode_data)
+        self.assertEqual(inode_a.addr, 1)
+        self.assertEqual(data, inode_a.full_inode_data)
 
-        b = self.pyfs.create_inode()
-        self.assertEqual(b.addr, 2)
-        b.parent_inode_addr = 1
+        inode_b = self.pyfs.create_inode()
+        self.assertEqual(inode_b.addr, 2)
+        inode_b.parent_inode_addr = 1
 
         self.pyfs.block_dev.seek(2*DEFAULT_BLOCK_SIZE, 0)
         data = self.pyfs.block_dev.read(DEFAULT_BLOCK_SIZE)
 
-        if not b.dirty:
-            self.assertEqual(data, b.full_inode_data)
+        if not inode_b.dirty:
+            self.assertEqual(data, inode_b.full_inode_data)
         
         self.pyfs.save_all()
         self.pyfs.block_dev.seek(2*DEFAULT_BLOCK_SIZE, 0)
         data = self.pyfs.block_dev.read(DEFAULT_BLOCK_SIZE)
 
-        self.assertEqual(len(data), len(b.full_inode_data))
-        self.assertEqual(data, b.full_inode_data)
+        self.assertEqual(len(data), len(inode_b.full_inode_data))
+        self.assertEqual(data, inode_b.full_inode_data)
     
     @log_test_case
     def test_check_fs(self):
@@ -74,9 +74,9 @@ class TestPYFS(unittest.TestCase):
     def test_create_inode(self):
         NUM_INODES = 200
         for i in range(2, NUM_INODES+1):
-            b = self.pyfs.create_inode()
-            self.assertEqual(b.addr, i)
-            b.parent_inode_addr = i-1
+            inode = self.pyfs.create_inode()
+            self.assertEqual(inode.addr, i)
+            inode.parent_inode_addr = i-1
 
         self.assertEqual(len(self.pyfs.loaded_inodes), NUM_INODES)
     
@@ -84,9 +84,9 @@ class TestPYFS(unittest.TestCase):
     def test_save_all(self):
         NUM_INODES = 200
         for i in range(2, NUM_INODES+1):
-            b = self.pyfs.create_inode()
-            self.assertEqual(b.addr, i)
-            b.parent_inode_addr = i-1
+            inode = self.pyfs.create_inode()
+            self.assertEqual(inode.addr, i)
+            inode.parent_inode_addr = i-1
 
         loaded_inodes = self.pyfs.loaded_inodes
         self.assertEqual(len(loaded_inodes), NUM_INODES)
@@ -95,9 +95,9 @@ class TestPYFS(unittest.TestCase):
         self.pyfs.read_root_inode()
 
         for i in range(2, NUM_INODES+1):
-            b = self.pyfs.read_inode(i)
-            self.assertEqual(b.addr, i)
-            self.assertEqual(b.parent_inode_addr, i-1)
+            inode = self.pyfs.read_inode(i)
+            self.assertEqual(inode.addr, i)
+            self.assertEqual(inode.parent_inode_addr, i-1)
         
         self.assertEqual(len(self.pyfs.loaded_inodes), NUM_INODES)
         self.assertCountEqual(loaded_inodes, self.pyfs.loaded_inodes)
@@ -112,18 +112,18 @@ class TestPYFS(unittest.TestCase):
         
         self.fs.seek(2*DEFAULT_BLOCK_SIZE, 0)
         for i in range(2, NUM_BLOCKS+1):
-            b = self.fs.read(DEFAULT_BLOCK_SIZE)
-            self.assertEqual(b, data[i-2])
+            inode = self.fs.read(DEFAULT_BLOCK_SIZE)
+            self.assertEqual(inode, data[i-2])
     
     @log_test_case
     def test_write_inode(self):
         NUM_INODE = 200
-        for i in range(2, NUM_INODE+1):
-            a = Inode(2, bytes(DEFAULT_BLOCK_SIZE), self.pyfs)
-            a.is_dir = False
-            a.data = os.urandom(DEFAULT_BLOCK_SIZE-INODE_META_SIZE)
-            self.pyfs.write_inode(a)
-            b = self.pyfs.read_inode(2, force_read=True)
-            self.assertEqual(a, b)
+        for _ in range(2, NUM_INODE+1):
+            inode_a = Inode(2, bytes(DEFAULT_BLOCK_SIZE), self.pyfs)
+            inode_a.is_dir = False
+            inode_a.data = os.urandom(DEFAULT_BLOCK_SIZE-INODE_META_SIZE)
+            self.pyfs.write_inode(inode_a)
+            inode_b = self.pyfs.read_inode(2, force_read=True)
+            self.assertEqual(inode_a, inode_b)
 
     

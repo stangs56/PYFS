@@ -3,9 +3,9 @@ import io
 import os
 import logging
 
-from pyfs.inode import Inode
-from pyfs.pyfs import PYFS
+from pyfs import PYFS, Inode
 from pyfs.constants import DEFAULT_BLOCK_SIZE, BYTE_ORDER, INODE_META_SIZE
+
 from tests.test_common import log_with_debug, log_test_case
 
 class TestPYFS(unittest.TestCase):

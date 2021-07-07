@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import logging
-import pyfs.pyfs #pylint: disable=unused-import
+import pyfs.pyfs#pylint: disable=unused-import
 
-from pyfs.constants import INODE_META_SIZE, BYTE_ORDER
+from .constants import INODE_META_SIZE, BYTE_ORDER
 
 logger = logging.getLogger("pyfs.node")
 

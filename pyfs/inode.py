@@ -74,20 +74,22 @@ class Inode(Node):
 
     @property
     def full_inode_data(self) -> bytes:
-        return self._data
-
-    @property
-    def data(self) -> bytes:
         if self.is_dir:
             tmp = bytes()
 
             for child in self.children:
-                # inode_logger.debug(child.data)
                 tmp += child.data
 
-            return tmp
+            return self.meta + tmp
         else:
+            return self._data
+
+    @property
+    def data(self) -> bytes:
+        if not self.is_dir and self.contains_data:
             return self._data[INODE_META_SIZE:INODE_META_SIZE+self.data_size]
+
+        raise RuntimeError('Inode is a directory')
 
     @data.setter
     def data(self, value : bytes):
